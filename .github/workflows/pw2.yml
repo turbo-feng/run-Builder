@@ -9,6 +9,8 @@
 name: NEW Make Passwall2 run files
 
 on:
+  schedule:
+    - cron: '0 8 */7 * *'
   workflow_dispatch:
 
 jobs:
