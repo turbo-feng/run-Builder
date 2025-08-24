@@ -31,15 +31,12 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/kiddin9/kwrt-packages.git
           ls kwrt-packages/luci-app-ssr-plus/
-
       - name: Parse version from Makefile
         id: setver
         run: |
           cd kwrt-packages/luci-app-ssr-plus
-
           ver=$(grep -E '^PKG_VERSION:=' Makefile | cut -d= -f2 | tr -d ' ')
           rel=$(grep -E '^PKG_RELEASE:=' Makefile | cut -d= -f2 | tr -d ' ')
-
           fullver="${ver}-r${rel}"
           echo "ssrp_version=$fullver" >> $GITHUB_ENV
     
@@ -92,7 +89,6 @@ jobs:
                     fi
               done
           done
-
           BASE_URL_A53="https://dl.openwrt.ai/$PACKAGE_VERSION/aarch64_cortex-a53/kiddin9/"
           echo "Fetching a53 directory page from $BASE_URL_A53"
           wget -qO- "$BASE_URL_A53" | \
@@ -191,7 +187,6 @@ jobs:
                     fi
               done
           done
-
       - name: List depends ipks
         run: |
           echo "List x86 depends ipk files"
@@ -210,18 +205,15 @@ jobs:
             echo -e "#!/bin/sh\n\nopkg update\nif [ \$? -ne 0 ]; then\n    echo \"update failed\"\n    exit 1\nfi\nopkg install depends/*.ipk --force-depends\nopkg install *.ipk --force-depends" > x86_64/install.sh
             chmod +x x86_64/install.sh
             cp x86_64/install.sh a53/
-
       - name: Clone makeself repo
         run: |
           git clone https://github.com/megastep/makeself.git
-
       - name: Change Dir
         run: |
             mv -f x86_64/ makeself/
             mv -f a53/ makeself/
             echo "移动后再查看makeself/的文件"
             ls -lah makeself/
-
       
       - name: Create self-extracting archives
         run: |
@@ -240,5 +232,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-   
